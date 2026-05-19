@@ -1,5 +1,19 @@
 from django.shortcuts import render
+from django.contrib.auth import authenticate
+from django.contrib.auth.forms import AuthenticationForm
 
 # Create your views here.
 def login_view(request):
-    return render(request, 'views/login.html')
+    if request.method == 'POST':
+        login_form = AuthenticationForm(request=request, data=request.POST)
+        if login_form.is_valid():
+            username = login_form.cleaned_data.get('username')
+            password = login_form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                pass
+            else:
+                pass
+    elif request.method == 'GET':
+        login_form = AuthenticationForm()
+    return render(request, 'views/login.html', {'login_form': login_form})
