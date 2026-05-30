@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import messages
 from django.views import View
@@ -24,6 +25,11 @@ def login_view(request):
     elif request.method == 'GET':
         login_form = AuthenticationForm()
     return render(request, 'views/login.html', {'login_form': login_form})
+
+@login_required	# In order for user to logout, must be first logged in
+def logout_view(request):
+	logout(request)
+	return redirect('main')	# Proceed to redirect user to the desired page or /url
 
 class RegisterView(View):
     def get(self, request):
